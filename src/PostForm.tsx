@@ -35,26 +35,34 @@ const PostForm: React.FC<PostFormProps> = ({ onPostSubmit, parentId = null, dept
 
   return (
     <div className={`${depth > 0 ? 'ml-4 mt-2' : 'mt-4'}`}>
-      <form onSubmit={handleSubmit} className="bg-white p-4 rounded-lg shadow">
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Name..."
-          className="border border-gray-300 p-2 rounded w-full mb-2"
-          required
-        />
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Write a new post..."
-          className="border border-gray-300 p-2 rounded w-full mb-2"
-          required
-        />
+      <form onSubmit={handleSubmit} className="bg-white p-4 rounded-lg shadow space-y-4">
+        <div className="flex flex-col">
+          <label htmlFor="name" className="text-sm font-medium text-gray-700">Name</label>
+          <input
+            id="name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Your name..."
+            className="border border-gray-300 p-2 rounded w-full"
+            required
+          />
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="text" className="text-sm font-medium text-gray-700">Post</label>
+          <textarea
+            id="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="What are your thoughts?"
+            className="border border-gray-300 p-2 rounded w-full"
+            required
+          />
+        </div>
         <button
           type="submit"
           disabled={!name || !text}
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 disabled:opacity-50 w-full"
+          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 w-full"
         >
           Submit
         </button>

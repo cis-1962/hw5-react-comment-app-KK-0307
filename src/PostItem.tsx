@@ -1,4 +1,3 @@
-// PostItem.tsx
 import React, { useState } from 'react';
 import PostForm from './PostForm';
 import { Post, PostProps } from './types';
@@ -20,21 +19,23 @@ const PostItem: React.FC<PostItemProps> = ({ post, onReply, onVote }) => {
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow mt-4 flex flex-col">
-      <div className="flex justify-between items-center mb-2">
-        <div className="flex items-center">
-          <button onClick={() => handleVote(1)} className="text-lg font-bold mr-2">&#9650;</button>
-          <span className="text-lg">{post.votes}</span>
-          <button onClick={() => handleVote(-1)} className="text-lg font-bold ml-2">&#9660;</button>
-        </div>
-        <span className="font-semibold">{post.name}</span>
+    <div className={`post-item ${post.depth === 0 ? 'mb-4' : 'ml-4 my-2'}`}>
+      <div className="voting-buttons">
+        <button onClick={() => handleVote(1)} className="text-lg font-bold mr-2">&#9650;</button>
+        <span className="text-lg">{post.votes}</span>
+        <button onClick={() => handleVote(-1)} className="text-lg font-bold ml-2">&#9660;</button>
       </div>
-      <p className="text-lg mb-4">{post.text}</p>
-      {post.depth < 3 && <PostForm onPostSubmit={handleReply} parentId={post.id} depth={post.depth + 1} />}
-      <div className="ml-4">
-        {replies.map((reply) => (
-          <PostItem key={reply.id} post={reply} onReply={onReply} onVote={onVote} />
-        ))}
+      <div className="post-content">
+        <div className="post-header mb-2">
+          <span className="font-semibold">{post.name}</span>
+        </div>
+        <p className="text-lg mb-4">{post.text}</p>
+        {post.depth === 0 && <PostForm onPostSubmit={handleReply} parentId={post.id} depth={post.depth + 1} />}
+        <div className="replies">
+          {replies.map((reply) => (
+            <PostItem key={reply.id} post={reply} onReply={onReply} onVote={onVote} />
+          ))}
+        </div>
       </div>
     </div>
   );
