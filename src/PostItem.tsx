@@ -20,7 +20,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, onReply, onVote }) => {
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow mt-4">
+    <div className="bg-white p-4 rounded-lg shadow mt-4 flex flex-col">
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center">
           <button onClick={() => handleVote(1)} className="text-lg font-bold mr-2">&#9650;</button>
