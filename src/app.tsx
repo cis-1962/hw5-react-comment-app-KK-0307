@@ -1,3 +1,4 @@
+// app.tsx
 import React, { useState } from 'react';
 import PostForm from './PostForm';
 import PostList from './PostList';
@@ -8,14 +9,25 @@ function App() {
   const [posts, setPosts] = useState<Post[]>([]);
 
   const addPost = (newPost: Post) => {
-    setPosts([...posts, newPost]);
+    setPosts([...posts, { ...newPost, votes: 0 }]);
+  };
+
+  const handleVote = (id: number, delta: number) => {
+    setPosts(posts.map(post => {
+      if (post.id === id) {
+        return { ...post, votes: post.votes + delta };
+      }
+      return post;
+    }));
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-4">
-      <h1 className="text-2xl font-bold mb-4">React Comment App</h1>
-      <PostForm onPostSubmit={addPost} depth={0} />
-      <PostList posts={posts} onReply={addPost} />
+      <div className="w-full max-w-2xl mx-auto bg-white shadow-lg rounded p-6">
+        <h1 className="text-3xl font-bold mb-6 text-center">CIS 197 Community</h1>
+        <PostForm onPostSubmit={addPost} depth={0} />
+        <PostList posts={posts} onReply={addPost} onVote={handleVote} />
+      </div>
     </div>
   );
 }

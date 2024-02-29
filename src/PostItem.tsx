@@ -1,30 +1,51 @@
+// PostItem.tsx
 import React, { useState } from 'react';
 import PostForm from './PostForm';
-import { Post } from './types';
+import { Post, PostProps } from './types';
 
-interface PostProps {
-  post: Post;
-  onReply: (reply: Post) => void;
+interface PostItemProps extends PostProps {
+  onVote: (id: number, delta: number) => void;
 }
 
-const PostItem: React.FC<PostProps> = ({ post, onReply }) => {
+const PostItem: React.FC<PostItemProps> = ({ post, onReply, onVote }) => {
   const [replies, setReplies] = useState<Post[]>([]);
 
-  const addReply = (reply: Post) => {
+  const handleReply = (reply: Post) => {
     setReplies([...replies, reply]);
+    onReply(reply);
+  };
+
+  const handleVote = (delta: number) => {
+    onVote(post.id, delta);
   };
 
   return (
-    <div className="border border-gray-300 p-4 rounded bg-white">
-      <p className="mb-2">{post.text} - <span className="font-semibold">{post.name}</span></p>
-      <PostForm onPostSubmit={addReply} parentId={post.id} depth={post.depth + 1} />
-      {replies.length > 0 && (
-        <div className="mt-4 ml-4 border-l-2 border-gray-200 pl-4">
-          {replies.map((reply) => (
-            <PostItem key={reply.id} post={reply} onReply={onReply} />
-          ))}
+    <div className="bg-white p-4 rounded-lg shadow mt-4">
+      <div className="flex justify-between items-center">
+        <span className="font-semibold">{post.name}</span>
+        <div className="flex items-center">
+          <button
+            onClick={() => handleVote(1)}
+            className="bg-green-200 hover:bg-green-300 text-green-800 rounded-full h-6 w-6 flex items-center justify-center mx-1"
+          >
+            &#9650;
+          </button>
+          <span>{post.votes}</span>
+          <button
+            onClick={() => handleVote(-1)}
+            className="bg-red-200 hover:bg-red-300 text-red-800 rounded-full h-6 w-6 flex items-center justify-center mx-1"
+          >
+            &#9660;
+          </button>
         </div>
-      )}
+      </div>
+      <p className="mt-2 mb-4">{post.text}</p>
+      {post.depth < 3 && <PostForm onPostSubmit={handleReply} parentId={post.id} depth={post.depth + 1} />}
+      <div className="ml-4 mt-4">
+        {replies.map((reply) => (
+          <PostItem key={reply.id} post={reply} onReply={onReply} onVote={onVote} />
+        ))}
+      </div>
     </div>
   );
 };
