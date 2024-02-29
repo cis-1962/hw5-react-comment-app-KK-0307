@@ -8,10 +8,12 @@ interface PostItemProps extends PostProps {
 
 const PostItem: React.FC<PostItemProps> = ({ post, onReply, onVote }) => {
   const [replies, setReplies] = useState<Post[]>([]);
+  const [isReplying, setIsReplying] = useState(false);
 
   const handleReply = (reply: Post) => {
     setReplies([...replies, reply]);
     onReply(reply);
+    setIsReplying(false); // Hide reply form after submitting
   };
 
   const handleVote = (delta: number) => {
@@ -19,22 +21,25 @@ const PostItem: React.FC<PostItemProps> = ({ post, onReply, onVote }) => {
   };
 
   return (
-    <div className={`post-item ${post.depth === 0 ? 'mb-4' : 'ml-4 my-2'}`}>
-      <div className="voting-buttons">
-        <button onClick={() => handleVote(1)} className="text-lg font-bold mr-2">&#9650;</button>
-        <span className="text-lg">{post.votes}</span>
-        <button onClick={() => handleVote(-1)} className="text-lg font-bold ml-2">&#9660;</button>
-      </div>
-      <div className="post-content">
-        <div className="post-header mb-2">
-          <span className="font-semibold">{post.name}</span>
+    <div className="post-item mb-4 bg-white rounded-lg shadow p-4">
+      <div className="flex items-start">
+        <div className="voting-buttons mr-2">
+          <button onClick={() => handleVote(1)} className="vote-button">&#9650;</button>
+          <span>{post.votes}</span>
+          <button onClick={() => handleVote(-1)} className="vote-button">&#9660;</button>
         </div>
-        <p className="text-lg mb-4">{post.text}</p>
-        {post.depth === 0 && <PostForm onPostSubmit={handleReply} parentId={post.id} depth={post.depth + 1} />}
-        <div className="replies">
-          {replies.map((reply) => (
-            <PostItem key={reply.id} post={reply} onReply={onReply} onVote={onVote} />
-          ))}
+        <div className="flex flex-col flex-1">
+          <div className="post-header mb-2">
+            <span className="font-semibold">{post.name}</span>
+          </div>
+          <p>{post.text}</p>
+          <button onClick={() => setIsReplying(!isReplying)} className="reply-button mt-2">Reply</button>
+          {isReplying && <PostForm onPostSubmit={handleReply} parentId={post.id} depth={post.depth + 1} />}
+          <div className="replies mt-4">
+            {replies.map((reply) => (
+              <PostItem key={reply.id} post={reply} onReply={onReply} onVote={onVote} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
