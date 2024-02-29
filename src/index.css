@@ -63,11 +63,11 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #da9ada;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #da9ada;
 }
 
 body {
@@ -106,12 +106,12 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
+    color: #da9ada;
     background-color: #da9ada;
     border-color: #d90ba2;
   }
   a:hover {
-    color: #747bff;
+    color: #da9ada;
   }
   button {
     background-color: #f9f9f9;
